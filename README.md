@@ -1,0 +1,2 @@
+An example of a React app with global state without using Redux. The entire Redux workflow is supported with a combination of reducers and middleware.
+Supported middleware for Redux such as redux-thunk.
