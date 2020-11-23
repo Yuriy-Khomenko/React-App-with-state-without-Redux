@@ -1,6 +1,6 @@
 import React from 'react';
 import reduxThunk from 'redux-thunk';
-import { combineReducers, useStore } from '../storeUtils';
+import { combineReducers } from '../storeUtils';
 import rootReducer from '../reducers';
 
 function logger() {
@@ -10,24 +10,8 @@ function logger() {
   }
 }
 
-const [reducer, initialStore] = combineReducers(rootReducer);
-const middleware = [reduxThunk, logger];
+export const [reducer, initialStore] = combineReducers(rootReducer);
+
+export const middleware = [reduxThunk, logger];
 
 export const StateContext = React.createContext({});
-
-const Store = ({ children }) => {
-  const [state, dispatch] = useStore(reducer, initialStore, middleware);
-
-  return (
-    <StateContext.Provider value={{ state, dispatch }}>
-      {children}
-    </StateContext.Provider>
-  )
-}
-
-export default Store;
-
-
-
-
-

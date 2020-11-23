@@ -4,11 +4,12 @@ import Title from './components/Title';
 import TodoContent from './containers/TodoContent';
 import TodoForm from './containers/TodoForm';
 import styled from 'styled-components';
-import Store from './store';
+import Store from './storeUtils';
+import { StateContext, middleware, reducer, initialStore } from './store';
 
 const App = (props) => {
   return (
-    <Store>
+    <Store context={StateContext} middleware={middleware} reducer={reducer} initialStore={initialStore}>
       <StyledApp className="App">
         <header>
           <Title />

@@ -1,4 +1,4 @@
-import { useReducer, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useReducer, useRef, useEffect } from 'react';
 
 export const combineReducers = (reducers) => {
   const keys = Object.keys(reducers);
@@ -8,7 +8,7 @@ export const combineReducers = (reducers) => {
     initStore[keys[i]] = reducers[keys[i]]();
   }
 
-  const combineReduce = (state = initStore, action = '') => {
+  const combinedReduces = (state = initStore, action = '') => {
     const newState = {};
     for (let i = 0; i < keys.length; i++) {
       newState[keys[i]] = reducers[keys[i]](state[keys[i]], action);
@@ -16,7 +16,7 @@ export const combineReducers = (reducers) => {
     return newState
   }
 
-  return [combineReduce, initStore];
+  return [combinedReduces, initStore];
 }
 
 export const useStore = (rootReducer, initialStore, middleware = []) => {
@@ -32,9 +32,21 @@ export const useStore = (rootReducer, initialStore, middleware = []) => {
       item({ dispatch, getState })(midDispatch), dispatch);
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     refStore.current.state = state;
   })
 
   return [state, refStore.current.dispatch];
 }
+
+const Store = ({ children, context, reducer, initialStore = {}, middleware = [] }) => {
+  const [state, dispatch] = useStore(reducer, initialStore, middleware);
+
+  return (
+    <context.Provider value={{ state, dispatch }}>
+      {children}
+    </context.Provider>
+  )
+}
+
+export default React.memo(Store);
